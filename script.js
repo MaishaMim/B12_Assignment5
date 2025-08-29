@@ -1,6 +1,6 @@
-// script.js - Vanilla JS only
+
 document.addEventListener('DOMContentLoaded', function () {
-  // Navbar counters
+  
   let likeCount = 0;
   let coinCount = 100;
   let copyCount = 0;
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   updateCounters();
 
-  // Heart behavior
+  
   document.querySelectorAll('.card-heart').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Copy behavior
+  
   document.querySelectorAll('.btn-copy').forEach(function (btn) {
     btn.addEventListener('click', async function (e) {
       e.stopPropagation();
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Call behavior
+  
   document.querySelectorAll('.btn-call').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Add to history
+  
   function addHistory(entry) {
     if (historyEmpty) historyEmpty.style.display = 'none';
 
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     historyListEl.insertBefore(item, historyListEl.firstChild);
   }
 
-  // Clear history
+  
   clearHistoryBtn.addEventListener('click', function () {
     historyListEl.querySelectorAll('.history-item').forEach(i => i.remove());
     if (historyEmpty) {
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Escape helper
+  
   function escapeHtml(text) {
     if (!text) return '';
     return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
