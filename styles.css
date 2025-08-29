@@ -1,0 +1,17 @@
+/* small card shadow and rounding */
+.shadow-card { box-shadow: 0 8px 20px rgba(2,6,23,0.06); }
+.rounded-2xl { border-radius: 1rem; }
+
+/* make history items look like the design */
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .55rem;
+  border-radius: .5rem;
+  background: #f8faf9;
+  border: 1px solid rgba(2,6,23,0.03);
+}
+
+/* clickable heart - change fill when liked */
+.heart-filled path { fill: #ef4444; stroke: #ef4444; }
