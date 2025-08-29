@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const historyEmpty = document.getElementById('historyEmpty');
   const clearHistoryBtn = document.getElementById('clearHistory');
 
-  // Update counters in DOM helper
   function updateCounters() {
     likeCountEl.textContent = String(likeCount);
     coinCountEl.textContent = String(coinCount);
@@ -20,35 +19,30 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   updateCounters();
 
-  // --- Heart behavior (increase navbar count) ---
+  // Heart behavior
   document.querySelectorAll('.card-heart').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      // increment navbar
       likeCount++;
       updateCounters();
-      // toggle fill style locally
       const svg = btn.querySelector('.heart-icon');
       svg.classList.toggle('heart-filled');
     });
   });
 
-  // --- Copy behavior (copy hotline number, increment copy count) ---
+  // Copy behavior
   document.querySelectorAll('.btn-copy').forEach(function (btn) {
     btn.addEventListener('click', async function (e) {
       e.stopPropagation();
-      // find closest card and number
       const card = btn.closest('.card');
       if (!card) return;
       const number = card.dataset.number || card.querySelector('.text-2xl')?.textContent?.trim() || '';
       try {
-        // copy to clipboard using modern API
         await navigator.clipboard.writeText(number);
         copyCount++;
         updateCounters();
         alert(`Copied: ${number}`);
-      } catch (err) {
-        // fallback method if clipboard API blocked
+      } catch {
         const textarea = document.createElement('textarea');
         textarea.value = number;
         document.body.appendChild(textarea);
@@ -58,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
           copyCount++;
           updateCounters();
           alert(`Copied (fallback): ${number}`);
-        } catch (e2) {
+        } catch {
           alert('Copy failed');
         }
         textarea.remove();
@@ -66,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // --- Call behavior (charge coins, record history, alert) ---
+  // Call behavior
   document.querySelectorAll('.btn-call').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -80,53 +74,39 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Deduct coins
       coinCount -= 20;
       updateCounters();
 
-      // Show alert (simulate calling)
       alert(`Calling ${serviceName} — ${number}`);
 
-      // Create history entry with exact local time
       const timeStr = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
-
-      addHistory({
-        name: serviceName,
-        number: number,
-        time: timeStr
-      });
+      addHistory({ name: serviceName, number, time: timeStr });
     });
   });
 
-  // Append history entry to list (prepend)
+  // Add to history
   function addHistory(entry) {
-    // remove empty message
     if (historyEmpty) historyEmpty.style.display = 'none';
 
     const item = document.createElement('div');
     item.className = 'history-item';
 
-    // left: name & number
     const left = document.createElement('div');
-    left.innerHTML = `<div class="text-sm font-medium">${escapeHtml(entry.name)}</div><div class="text-xs text-slate-500">${escapeHtml(entry.number)}</div>`;
+    left.innerHTML =
+      `<div class="text-sm font-medium">${escapeHtml(entry.name)}</div>
+       <div class="text-xs text-slate-500">${escapeHtml(entry.number)}</div>`;
 
-    // right: time
     const right = document.createElement('div');
     right.innerHTML = `<div class="text-xs text-slate-400">${escapeHtml(entry.time)}</div>`;
 
     item.appendChild(left);
     item.appendChild(right);
-
-    // prepend to top
     historyListEl.insertBefore(item, historyListEl.firstChild);
   }
 
   // Clear history
   clearHistoryBtn.addEventListener('click', function () {
-    // Remove all history-item children and show empty
-    const items = historyListEl.querySelectorAll('.history-item');
-    items.forEach(i => i.remove());
-
+    historyListEl.querySelectorAll('.history-item').forEach(i => i.remove());
     if (historyEmpty) {
       historyEmpty.style.display = 'block';
     } else {
@@ -138,10 +118,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Utility: escapeHtml to avoid XSS if data ever dynamic
+  // Escape helper
   function escapeHtml(text) {
     if (!text) return '';
-    return text.replace(/[&<>"']/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]); });
+    return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   }
-
 });
