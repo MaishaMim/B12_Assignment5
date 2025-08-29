@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Navbar counters
   let likeCount = 0;
   let coinCount = 100;
-  let copyCount = 2;
+  let copyCount = 0;
 
   const likeCountEl = document.getElementById('likeCount');
   const coinCountEl = document.getElementById('coinCount');
